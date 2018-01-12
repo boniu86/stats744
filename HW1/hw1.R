@@ -105,3 +105,28 @@ print(gg2)
 gg3<-gg2+facet_wrap(~results,labeller=label_both)
 print(gg3)
 
+
+##make more complicated plot;
+gg0 <- ggplot(heart_data,aes(age,exercise_induced_angina))+geom_point()
+print(gg0)
+##no sence of this plots
+
+(heart_data
+  ## collapse age by year
+  %>% mutate(f_age=cut(age,breaks=29:77,labels=seq(29.5,76.5)),
+             ## then turn it back into a number
+             f_age=as.numeric(as.character(f_age)))
+  ## means by age group/heart diseaes vs non-heart disease/number of chest pain type
+  %>% group_by(f_age,results,chest_pain_type)
+  ## compute proportion, n, standard error
+  %>% summarise(prop=mean(as.numeric(exercise_induced_angina)-1),
+                n=n(),
+                se=sqrt(prop*(1-prop)/n))
+) -> heart_sum
+
+gg4 <- ggplot(heart_sum,aes(f_age,prop,colour=results)) +
+  geom_point(aes(size=n))+
+  geom_linerange(aes(ymin=prop-1*se,ymax=prop+1*se))+
+  facet_wrap(~chest_pain_type,labeller=label_both)+
+  scale_colour_brewer(palette="Dark2")
+print(gg4)
