@@ -80,6 +80,28 @@ summary(heart_data)
 ##results: Absence (1) or presence (2) of heart disease
 
 
+theme_set(theme_bw())
 ##simple plot
-gg1<-ggplot(heart_data,aes(x=age,y=maximum_heart_rate_achieved,colour=results))
-print(gg1+geom_point())
+
+#first may intereted in the relationship between age and max heart rate of patients
+#no idea of any medical knowlege, simple guess is maybe older age tend to have higher heart rate which indates presence of heart problem
+#make a simple scatter plot coloured by absence 1 and presence 2 of heart disease;
+gg1<-ggplot(heart_data,aes(x=age,
+                           y=maximum_heart_rate_achieved,
+                           colour=results))
+print(gg1+geom_point(size=4,alpha=0.2)) ## linear model)
+#from plot, looks like with people suffered more heart pain with ages, 
+#since only few points is blue (presence of heart disease) before 40, most heart disease patients are 40 to 70
+#however,this pheonomenone may cause by lack of data collection, not sure for now. but in this dataset, older ppl suffer heart disease more than yonger ppl;
+#also, I thought higher max heart rate achieved will lead heart problem. However, opposite way in this dataset
+#mostly heart disease patients have lower max heart rate
+#overall, most heart disease patinets are located in 40 to 70 years old with max heart rate from 100 to 175;
+ 
+##ad smooth line
+gg2<-gg1+geom_point()+
+             geom_smooth(method="lm",aes(color=results,fill=results))
+print(gg2)
+
+gg3<-gg2+facet_wrap(~results,labeller=label_both)
+print(gg3)
+
