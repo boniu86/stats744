@@ -83,27 +83,20 @@ summary(heart_data)
 theme_set(theme_bw())
 ##simple plot
 
-#first may intereted in the relationship between age and max heart rate of patients
-#no idea of any medical knowlege, simple guess is maybe older age tend to have higher heart rate which indates presence of heart problem
-#make a simple scatter plot coloured by absence 1 and presence 2 of heart disease;
-gg1<-ggplot(heart_data,aes(x=age,
-                           y=maximum_heart_rate_achieved,
-                           colour=results))
-print(gg1+geom_point(size=4,alpha=0.2)) ## linear model)
-#from plot, looks like with people suffered more heart pain with ages, 
-#since only few points is blue (presence of heart disease) before 40, most heart disease patients are 40 to 70
-#however,this pheonomenone may cause by lack of data collection, not sure for now. but in this dataset, older ppl suffer heart disease more than yonger ppl;
-#also, I thought higher max heart rate achieved will lead heart problem. However, opposite way in this dataset
-#mostly heart disease patients have lower max heart rate
-#overall, most heart disease patinets are located in 40 to 70 years old with max heart rate from 100 to 175;
+#may interested in gender difference in resting blood pressure with ages caused by heart diseaes;
+gg1<-(ggplot(heart_data,aes(x=age,y=resting_blood_pressure,colour=results)))+geom_point()+facet_wrap(~sex)
+print(gg1)
+##conclusion: 0 is female,1 is male; colour 1 is non-heart-disease, otherwise 2;
+ #blood pressure does not differ with gender;
+ #the number of female herat disease patients are obviously less than male's;
+ #for female, almost all heart diseaes patients are over 50 ys old; also resting blood pressure are higher in heart diseaes patients than other;
+ #for male, heart diseaes patintes ages across all the age range, from 35 to 70; blood pressure are range all across of heart diseaes patients and non-heart diseaes;
+ #seems like female heart diseaes risk increase with ages, this phenomenon only occurs in here, may wrong due to lack to data collection;
  
-##ad smooth line
-gg2<-gg1+geom_point()+
-             geom_smooth(method="lm",aes(color=results,fill=results))
-print(gg2)
 
-gg3<-gg2+facet_wrap(~results,labeller=label_both)
-print(gg3)
+##ad smooth line
+gg2<-gg1+geom_smooth(method="lm",aes(color=results,fill=results))
+print(gg2)
 
 
 ##make more complicated plot;
@@ -117,7 +110,7 @@ print(gg0)
              ## then turn it back into a number
              f_age=as.numeric(as.character(f_age)))
   ## means by age group/heart diseaes vs non-heart disease/number of chest pain type
-  %>% group_by(f_age,results,chest_pain_type)
+  %>% group_by(f_age,results,thal)
   ## compute proportion, n, standard error
   %>% summarise(prop=mean(as.numeric(exercise_induced_angina)-1),
                 n=n(),
@@ -127,6 +120,6 @@ print(gg0)
 gg4 <- ggplot(heart_sum,aes(f_age,prop,colour=results)) +
   geom_point(aes(size=n))+
   geom_linerange(aes(ymin=prop-1*se,ymax=prop+1*se))+
-  facet_wrap(~chest_pain_type,labeller=label_both)+
+  facet_wrap(~thal,labeller=label_both)+
   scale_colour_brewer(palette="Dark2")
 print(gg4)
