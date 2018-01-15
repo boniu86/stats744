@@ -100,8 +100,7 @@ print(gg2)
 
 
 ##make more complicated plot;
-gg0 <- ggplot(heart_data,aes(age,exercise_induced_angina))+geom_point()
-print(gg0)
+
 ##no sence of this plots
 
 (heart_data
@@ -117,9 +116,20 @@ print(gg0)
                 se=sqrt(prop*(1-prop)/n))
 ) -> heart_sum
 
-gg4 <- ggplot(heart_sum,aes(f_age,prop,colour=results)) +
+gg3 <- ggplot(heart_sum,aes(f_age,prop,colour=results)) +
   geom_point(aes(size=n))+
   geom_linerange(aes(ymin=prop-1*se,ymax=prop+1*se))+
   facet_wrap(~thal,labeller=label_both)+
   scale_colour_brewer(palette="Dark2")
-print(gg4)
+print(gg3)
+
+#conclusion:plot freq of exercise include angina or not of particular age, coloured by 
+#with heart diseaes and without heart diseaes,plot splits by thal defect, normal, fixed and reversable;
+#among patients with normal effect (thal 3) exercise include angina increase with ages, 
+ #and heart disease patients are little higher prop of exercise include angina than non-heart diseaes patients;
+#among patients with revesable effect (thal 7), exercise include angina clearly higher in heart diseaes patients than non-heart diseaes patients;
+
+#no idea why there is NA;
+##Warning messages:
+#1: Removed 1 rows containing missing values (geom_point). 
+#2: Removed 1 rows containing missing values (geom_linerange).
