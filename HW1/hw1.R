@@ -1,7 +1,7 @@
 library(tidyverse)  ## BMB: tidyverse includes readr 
 
 ## BMB: where does this data set come from?
-## BMB: RStudio has a spell-checker, but only for .Rmd files ...
+## BMB: by the way: RStudio does have a spell-checker, but only for .Rmd files ...
 
 ##load dataset
 heart_data<-read_csv("heart.csv",col_names =FALSE)
@@ -170,3 +170,5 @@ print(gg3)
 
 ## BMB: probably a case where there's only a single value in a group,
 ##  so the standard error is undefined
+
+## BMB: did you use anything you learned from Rauser's video?
