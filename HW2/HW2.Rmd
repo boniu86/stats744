@@ -1,0 +1,43 @@
+---
+title: "Vaccine Data plot redesign"
+author: "Ruoyuan Li"
+
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Pattern of Original plot
+It showed the number of reported cases along with year and pointed out vaccine licensed year and historical year for audience to explain what happened after those event. 
+
+## Redesign plots
+```{r ggplot2}
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(directlabels)
+vac_data<-read_csv("vaccine_data_online.csv")
+vaccine<-(vac_data%>%select(year,cases,disease,vaccine)
+         %>%filter(!vaccine %in% c("FALSE"))
+)
+g1<-(ggplot(vac_data,aes(x=year)))+scale_x_continuous(breaks = seq(1947,2005,5))
+g2<-g1+geom_line(aes(y=cases,colour=disease,group=disease),size=1,show.legend = FALSE)
+g3<-print(g2
+          +facet_wrap(~disease,labeller = label_both,scales = "free")
+          +geom_point(data=vaccine,aes(x=year,y=cases,fill=vaccine),show.legend = FALSE)
+          +theme(axis.text.x = element_text(angle = 60, hjust = 1))
+)
+```
+
+* easy to see the trend after vaccine licensed
+
+* scale of y free adjust by diseases, easy to read number of cases
+
+
+```{r}
+
+```
+
