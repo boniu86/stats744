@@ -1,6 +1,6 @@
 ---
 title: "Vaccine Data plot redesign"
-author: "Ruoyuan Li"
+author: "Monica"
 
 output: pdf_document
 ---
@@ -17,27 +17,47 @@ It showed the number of reported cases along with year and pointed out vaccine l
 library(readr)
 library(ggplot2)
 library(dplyr)
-library(tidyr)
-library(directlabels)
-vac_data<-read_csv("vaccine_data_online.csv")
-vaccine<-(vac_data%>%select(year,cases,disease,vaccine)
-         %>%filter(!vaccine %in% c("FALSE"))
+
+
+theme_set(theme_bw())
+
+vac_data<-(read_csv("vaccine_data_online.csv")
+           %>%mutate(cases_divide_1k=cases/1000))
+
+vaccine<-(vac_data%>%select(year,cases_divide_1k,disease,vaccine)
+          %>%filter(!vaccine %in% c("FALSE")))
+g1<-ggplot(vac_data,aes(x=year))+scale_x_continuous(breaks = seq(1945,2015,5))
+g2<-g1+geom_line(aes(y=cases_divide_1k,colour=disease,group=disease),size=1,show.legend = FALSE)
+g3<-(g2
+     +facet_wrap(~disease,labeller = label_both,scales = "free")
+     +geom_point(data=vaccine,aes(x=year,y=cases_divide_1k,colour=disease),size=3,show.legend = FALSE)
+     +theme(axis.text.x = element_text(angle = 60, hjust = 1))
+     
 )
-g1<-(ggplot(vac_data,aes(x=year)))+scale_x_continuous(breaks = seq(1947,2005,5))
-g2<-g1+geom_line(aes(y=cases,colour=disease,group=disease),size=1,show.legend = FALSE)
-g3<-print(g2
-          +facet_wrap(~disease,labeller = label_both,scales = "free")
-          +geom_point(data=vaccine,aes(x=year,y=cases,fill=vaccine),show.legend = FALSE)
-          +theme(axis.text.x = element_text(angle = 60, hjust = 1))
+print(g3)#redesign plot
+
+
+g4<-ggplot(vac_data,aes(x=disease))
+g5<-(g4+geom_point(aes(y=year,size=cases_divide_1k),alpha=0.2)
+     +scale_y_continuous(trans = "reverse",breaks = seq(1945,2015,5))
+     +scale_size(range = c(0,20))
+     
+)  
+g6<-(g5+geom_point(data=vaccine,aes(x=disease,y=year,colour=disease,size=cases_divide_1k),alpha=0.7)
 )
+print(g6)
+
+
 ```
+
+# for first plot
 
 * easy to see the trend after vaccine licensed
 
-* scale of y free adjust by diseases, easy to read number of cases
+* scale of cases changed, easier to read the number,each disease has its own y axis scale then easier to capture the changes. 
 
+# for second plot
 
-```{r}
+just same as example,
 
-```
 
