@@ -35,7 +35,6 @@ g3<-(g2
 )
 print(g3)#redesign plot
 
-
 g4<-ggplot(vac_data,aes(x=disease))
 g5<-(g4+geom_point(aes(y=year,size=cases_divide_1k),alpha=0.2)
      +scale_y_continuous(trans = "reverse",breaks = seq(1945,2015,5))
