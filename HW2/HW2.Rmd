@@ -18,7 +18,6 @@ library(readr)
 library(ggplot2)
 library(dplyr)
 
-
 theme_set(theme_bw())
 
 vac_data<-(read_csv("vaccine_data_online.csv")
@@ -43,7 +42,7 @@ g5<-(g4+geom_point(aes(y=year,size=cases_divide_1k),alpha=0.2)
      +scale_size(range = c(0,20))
      
 )  
-g6<-(g5+geom_point(data=vaccine,aes(x=disease,y=year,colour=disease,size=cases_divide_1k),alpha=0.7)
+g6<-(g5+geom_point(data=vaccine,aes(x=disease,y=year,colour=disease,size=cases_divide_1k),alpha=0.7)+theme(axis.text.x = element_text(angle = 60))
 )
 print(g6)
 
