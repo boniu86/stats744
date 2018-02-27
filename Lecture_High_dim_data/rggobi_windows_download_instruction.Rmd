@@ -1,6 +1,5 @@
 ---
 title: "Ggobi_windows_download_instruction"
-author: "Ruoyuan Li"
 date: "February 27, 2018"
 output: pdf_document
 fontsize: 11pt
