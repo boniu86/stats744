@@ -11,7 +11,7 @@ header-includes:
 
 
 
-1. first of all, most easy way is try run this command in R studio,    source("http://www.ggobi.org/downloads/install.r"), then install rggobi package, after that remember to library rggobi to check it is working or not. If not, you may need to install GTK+ and Ggobi manually, so keep following.  
+1. first of all, most easy way is try run this command in R studio:    source("http://www.ggobi.org/downloads/install.r").  Then install rggobi package, after that remember to library rggobi to check it is working or not. If not, you may need to install GTK+ and Ggobi manually, so keep following.  
 
 
 2. install GTK+, following this link carefully: [GTK+](https://www.gtk.org/download/macos.php) 
