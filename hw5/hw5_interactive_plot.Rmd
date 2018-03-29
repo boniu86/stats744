@@ -1,0 +1,81 @@
+---
+title: "Interactive_plot"
+author: "Ruoyuan Li"
+date: "March 28, 2018"
+output: html_document
+---
+
+* redo vaccine data 
+
+```{r  message=FALSE,warning=FALSE}
+library(readr)
+library(tidyverse)
+library(plotly)
+library(reshape2)
+library(directlabels)
+
+theme_set(theme_bw())
+
+vac_data<-(read_csv("vaccine_data_online.csv")
+           %>%mutate(cases_divide_1k=cases/1000))
+
+vaccine<-(vac_data%>%select(year,cases_divide_1k,disease,vaccine,cases)
+          %>%filter(!vaccine %in% c("FALSE")))
+
+
+g4<-ggplot(vac_data,aes(x=disease))
+g5<-(g4+geom_point(aes(y=year,size=cases),alpha=0.2)
+     +scale_y_continuous(trans = "reverse",breaks = seq(1945,2015,5))
+     +scale_size(range = c(0,20))
+)  
+g6<-(g5+geom_point(data=vaccine,aes(x=disease,y=year,colour=disease,size=cases),alpha=0.7)
+     +theme(axis.text.x = element_text(angle = 60))
+)
+ggplotly(g6)
+```
+
+* also redo fish data after calculting mean for site under same drugcat
+
+```{r message=FALSE,warning=FALSE}
+
+
+fish_data<-read_csv("fish.csv")
+names(fish_data)[3]<-make.names("SampleID")
+
+
+fish_name<-read_csv("fish_names.csv")
+
+#wide format to long format
+fish_long<-melt(fish_data, id.vars = c("SampleID", "Site","MetCode","SamplerType"),
+     variable.name = "treatment_variable", 
+     value.name = "treatment_value")
+
+
+
+#merge name data with  long format data.
+fish_name$treatment_variable<- fish_name$abbr
+full<-merge(fish_long, fish_name)
+(full%>%select(-abbr))->full
+
+
+(full%>%select(Site,treatment_value,drugcat,treatment_variable)
+  %>%group_by(drugcat,Site,treatment_variable)
+  %>%summarise(avg=mean(treatment_value))
+)->a
+
+
+p11<-(ggplot(a,aes(x=Site,y=avg,colour=treatment_variable))
+     +geom_point(alpha=0.3)
+     +facet_wrap(~drugcat,labeller = label_both,scales = "free"))
+
+pp11<-(p11+geom_line(aes(group=treatment_variable))
+      +geom_dl(aes(label=treatment_variable),,method="last.points")
+      +theme(axis.text.x = element_text(angle = 60))
+      +theme(legend.position="none")
+)
+
+
+ggplotly(pp11)
+```
+
+
