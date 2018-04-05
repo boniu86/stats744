@@ -1,0 +1,73 @@
+---
+title: "Spatial_Data"
+author: "Ruoyuan Li"
+date: "March 28, 2018"
+output: html_document
+---
+
+* trying some example via crime data through ggmap, always failed at get_map, not sure what happened. For this assignment, have no idea how to do it well. but it looks fancy with map. 
+
+* checked some leaflet example online [here](https://rstudio.github.io/leaflet/showhide.html)
+
+* the truth is for now it is hard to come up with fancy plot, it is rearly use in my daily life, so it is hard to interprete a good ploto except simple things like call a city name and show the map.
+
+
+* summary of learning: I realized spatial data is useful for earth science, environment science study. Anything related to location will be useful to interprete with spatial data. I never use data with lag and long, so it is hard to learn and apply immediately. But it is nice way to show more information with location specified data. 
+
+
+```{r message=FALSE}
+library(leaflet)
+library(forcats)
+library(labeling)
+library(ggmap)
+library(tidyverse)
+library(skimr)
+library(rgdal)
+
+```
+
+
+```{r}
+skim(quakes)
+quakes <- quakes %>%
+  dplyr::mutate(mag.level = cut(mag,c(3,6),
+                                labels = c('>3 ')))
+
+
+quakes.df <- split(quakes, quakes$mag.level)
+
+l <- leaflet() %>% addTiles()
+
+names(quakes.df) %>%
+  purrr::walk( function(df) {
+    l <<- l %>%
+      addMarkers(data=quakes.df[[df]],
+                 lng=~long, lat=~lat,
+                 label=~as.character(mag),
+                 popup=~as.character(mag),
+                 group = df,
+                 clusterOptions = markerClusterOptions(removeOutsideVisibleBounds = F),
+                 labelOptions = labelOptions(noHide = F,
+                                             direction = 'auto'))
+  })
+
+l %>%
+  addLayersControl(
+    overlayGroups = names(quakes.df),
+    options = layersControlOptions(collapsed = FALSE)
+  )
+
+
+
+```
+
+```{r}
+paris <- get_map(location = "paris")
+str(paris)
+ggmap(paris, extent = "normal")
+
+
+```
+
+```
+
