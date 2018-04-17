@@ -5,14 +5,13 @@ date: "March 28, 2018"
 output: html_document
 ---
 
-* trying some example via crime data through ggmap, always failed at get_map, not sure what happened. For this assignment, have no idea how to do it well. but it looks fancy with map. 
+* trying some example crime data through `ggmap`, always failed at `get_map`, not sure what happened. For this assignment, have no idea how to do it well. but it looks fancy with map. 
 
 * checked some leaflet example online [here](https://rstudio.github.io/leaflet/showhide.html)
 
-* the truth is for now it is hard to come up with fancy plot, it is rearly use in my daily life, so it is hard to interprete a good ploto except simple things like call a city name and show the map.
+* the truth is for now it is hard to come up with fancy plot, it is rarely used in my daily life, so it is hard to interprete a good plot except simple things like call a city name and show the map.
 
-
-* summary of learning: I realized spatial data is useful for earth science, environment science study. Anything related to location will be useful to interprete with spatial data. I never use data with lag and long, so it is hard to learn and apply immediately. But it is nice way to show more information with location specified data. 
+* summary of learning: I realized spatial data is useful for earth science, environment science study. Anything related to location will be useful to interprete with spatial data. I never use data with lat and long, so it is hard to learn and apply immediately. But it is nice way to show more information with location specified data. 
 
 
 ```{r message=FALSE}
@@ -38,6 +37,8 @@ quakes.df <- split(quakes, quakes$mag.level)
 
 l <- leaflet() %>% addTiles()
 
+## BMB: what is this doing??? It's good that you cited your sources,
+##  but can you say anything about what any of the code means??
 names(quakes.df) %>%
   purrr::walk( function(df) {
     l <<- l %>%
@@ -56,18 +57,10 @@ l %>%
     overlayGroups = names(quakes.df),
     options = layersControlOptions(collapsed = FALSE)
   )
-
-
-
 ```
 
 ```{r}
 paris <- get_map(location = "paris")
 str(paris)
 ggmap(paris, extent = "normal")
-
-
 ```
-
-```
-

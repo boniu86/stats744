@@ -34,11 +34,13 @@ g6<-(g5+geom_point(data=vaccine,aes(x=disease,y=year,colour=disease,size=cases),
 ggplotly(g6)
 ```
 
+**BMB**: nice! there are a few things you could do here
+(adjust spacing; use an ordering other than alphabetical; figure out
+how to fix up legend)
+
 * also redo fish data after calculting mean for site under same drugcat
 
 ```{r message=FALSE,warning=FALSE}
-
-
 fish_data<-read_csv("fish.csv")
 names(fish_data)[3]<-make.names("SampleID")
 
